@@ -3,7 +3,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/user/types/userRole.type';
 
 import {
-  Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors
+  Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -17,14 +17,21 @@ export class PerformanceController {
 
   //공연 목록 조회
   @Get()
-  async findAll() {
-    const performances = await this.performanceService.findAll();
-    return {
-        status: 200,
-        message: '공연 목록 조회에 성공했습니다.',
-        data: performances
+  async findAll(@Query('category') category?: string) {
+    if(category) {
+        return {
+            status: 200,
+            message: `${category} 카테고리의 공연 목록 조회에 성공했습니다.`,
+            data: await this.performanceService.findAll(category)
+        }
+    }else {
+        return{
+            status: 200,
+            message: '공연 목록 조회에 성공했습니다.',
+            data: await this.performanceService.findAll()
+        }
     }
-  }
+}
 
   //공연 상세 조회
   @Get(':performanceId')

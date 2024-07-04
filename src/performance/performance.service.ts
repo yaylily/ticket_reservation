@@ -23,14 +23,16 @@ export class PerformanceService {
   ) {}
 
   //공연 목록 조회
-  async findAll(): Promise<Performance[]> {
-    return await this.performanceRepository.find({
-      select: ['performanceId', 'title', 'category', 'location', 'price', 'createdAt', 'updatedAt'],
-      order: {
-        createdAt: 'DESC'
+  async findAll(category?: string): Promise<Performance[]> {
+    const query = this.performanceRepository.createQueryBuilder('performance')
+      .select(['performance.performanceId', 'performance.title', 'performance.category', 'performance.location', 'performance.price', 'performance.createdAt', 'performance.updatedAt'])
+      .orderBy('performance.createdAt', 'DESC')
+        
+      if(category) {
+        query.where('performance.category = :category', {category})
       }
-    });
-  }
+      return await query.getMany();
+      }
 
   //공연 상세 조회
   async findOne(performanceId: number): Promise<Performance> {
