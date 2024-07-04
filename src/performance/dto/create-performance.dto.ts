@@ -16,6 +16,9 @@ class PerformanceScheduleDto {
     @IsNotEmpty({ message: '전체 좌석수를 넣어주세요.' })
     totalSeats:number;
 
+    @IsNumber()
+    remainingSeats?: number;
+
 }
 
 export class CreatePerformanceDto {

@@ -37,7 +37,7 @@ export class PerformanceService {
   //공연 상세 조회
   async findOne(performanceId: number): Promise<Performance> {
     const performance = await this.performanceRepository.findOne({
-        where: {performanceId: performanceId},
+        where: {performanceId},
         relations: ['schedules']
     });
 
@@ -45,7 +45,23 @@ export class PerformanceService {
         throw new NotFoundException('공연을 찾을 수 없습니다.');
     }
 
-    return performance
+    const AvailableSchedule = performance.schedules.map(schedule => ({
+        ...schedule,
+        isAvailable: schedule.remainingSeats>0
+    }))
+
+    return {
+        performanceId: performance.performanceId,
+        title: performance.title,
+        description: performance.description,
+        category: performance.category,
+        location: performance.location,
+        price: performance.price,
+        img: performance.img,
+        schedules: AvailableSchedule,
+        createdAt: performance.createdAt,
+        updatedAt: performance.updatedAt,
+    };
   }
 
 
@@ -61,6 +77,7 @@ export class PerformanceService {
     const performanceSchedule = schedules.map(schedule =>
         this.performanceScheduleRepository.create({
             ...schedule,
+            remainingSeats: schedule.remainingSeats ?? schedule.totalSeats,
             performance: savedPerformance,
         })
         )
