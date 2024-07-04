@@ -98,6 +98,7 @@ export class UserService {
     return await this.userRepository.findOneBy({ email });
   }
 
+  //내 프로필 조회
   async getUserInfo(userId: number) {
     const user = await this.userRepository.findOne({
         where: {userId},
