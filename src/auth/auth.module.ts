@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 //인증을 위한 NestJS의 Passport 모듈
 import { PassportModule } from '@nestjs/passport';
+import { UserModule } from 'src/user/user.module';
 
 import { JwtStrategy } from './jwt.strategy';
 
@@ -22,6 +23,7 @@ import { JwtStrategy } from './jwt.strategy';
       //팩토리 함수에 주입할 프로바이더를 배열로 지정 - ConfigService가 주입되어 환경 변수에 접근할 수 있음
       inject: [ConfigService],
     }),
+    UserModule,
   ],
   //JwtStrategy 클래스를 모듈의 프로바이더로 포함 - 모듈이 이 전략을 의존성 주입을 통해 사용할 수 있게 해줌
   providers: [JwtStrategy],
