@@ -36,11 +36,18 @@ export class PerformanceService {
 
   //공연 상세 조회
   async findOne(performanceId: number): Promise<Performance> {
-    return await this.performanceRepository.findOne({
+    const performance = await this.performanceRepository.findOne({
         where: {performanceId: performanceId},
         relations: ['schedules']
     });
+
+    if(!performance){
+        throw new NotFoundException('공연을 찾을 수 없습니다.');
+    }
+
+    return performance
   }
+
 
   //공연 등록
   async create(createPerformanceDto: CreatePerformanceDto): Promise<Performance> {
