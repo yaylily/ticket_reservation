@@ -8,6 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
+import { UserInfo } from './user/entities/userinfo.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -21,7 +23,7 @@ const typeOrmModuleOptions = {
     port: configService.get('DB_PORT'),
     database: configService.get('DB_NAME'),
     //'entities' 데이터베이스 테이블과 매핑될 엔티티 클래스들을 배열로 명시
-    entities: [],
+    entities: [User, UserInfo],
     //'synchronize' 엔티티 정보를 바탕으로 데이터베이스 스키마를 자동으로 동기화할지 여부를 결정
     synchronize: configService.get('DB_SYNC'),
     //데이터베이스 작업 로그 활성화
