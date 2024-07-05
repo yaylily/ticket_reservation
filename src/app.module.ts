@@ -13,6 +13,8 @@ import { UserInfo } from './user/entities/userinfo.entity';
 import { PerformanceModule } from './performance/performance.module';
 import { PerformanceSchedule } from './performance/entities/performanceSchedule.entity';
 import { Performance} from './performance/entities/performance.entity'
+import { ReservationModule } from './reservation/reservation.module';
+import { Reservation } from './reservation/entities/reservation.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -26,7 +28,7 @@ const typeOrmModuleOptions = {
     port: configService.get('DB_PORT'),
     database: configService.get('DB_NAME'),
     //'entities' 데이터베이스 테이블과 매핑될 엔티티 클래스들을 배열로 명시
-    entities: [User, UserInfo, Performance, PerformanceSchedule],
+    entities: [User, UserInfo, Performance, PerformanceSchedule, Reservation],
     //'synchronize' 엔티티 정보를 바탕으로 데이터베이스 스키마를 자동으로 동기화할지 여부를 결정
     synchronize: configService.get('DB_SYNC'),
     //데이터베이스 작업 로그 활성화
@@ -54,6 +56,7 @@ const typeOrmModuleOptions = {
     AuthModule,
     UserModule,
     PerformanceModule,
+    ReservationModule,
   ],
   //애플리케이션의 컨트롤러와 서비스(프로바이더)를 여기에 추가할 수 있음
   controllers: [],
