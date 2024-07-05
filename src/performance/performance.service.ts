@@ -22,15 +22,22 @@ export class PerformanceService {
     private readonly performanceScheduleRepository: Repository<PerformanceSchedule>,
   ) {}
 
-  //공연 목록 조회
-  async findAll(category?: string): Promise<Performance[]> {
+  //공연 목록 조회 
+  async findAll(category?: string, title?: string): Promise<Performance[]> {
     const query = this.performanceRepository.createQueryBuilder('performance')
-      .select(['performance.performanceId', 'performance.title', 'performance.category', 'performance.location', 'performance.price', 'performance.createdAt', 'performance.updatedAt'])
+      .select(['performance.performanceId', 'performance.title', 'performance.category','performance.img', 'performance.location', 'performance.price', 'performance.createdAt', 'performance.updatedAt'])
       .orderBy('performance.createdAt', 'DESC')
         
+      //카테고리 분류
       if(category) {
         query.where('performance.category = :category', {category})
       }
+
+      //공연명 검색
+      if(title){
+        query.andWhere('performance.title Like :title', {title: `%${title}%`})
+      }
+
       return await query.getMany();
       }
 

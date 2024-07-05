@@ -17,18 +17,25 @@ export class PerformanceController {
 
   //공연 목록 조회
   @Get()
-  async findAll(@Query('category') category?: string) {
+  async findAll(@Query('category') category?: string, @Query('title') title?: string) {
+    const performances = await this.performanceService.findAll(category, title);
     if(category) {
         return {
             status: 200,
             message: `${category} 카테고리의 공연 목록 조회에 성공했습니다.`,
-            data: await this.performanceService.findAll(category)
+            data: performances
         }
-    }else {
+    } else if(title){
+        return {
+            status: 200,
+            message: `${title}에 대한 공연 목록 조회에 성공했습니다.`,
+            data: performances
+        }
+    } else {
         return{
             status: 200,
             message: '공연 목록 조회에 성공했습니다.',
-            data: await this.performanceService.findAll()
+            data: performances
         }
     }
 }
