@@ -1,4 +1,4 @@
-import { Controller, Post, Body,  UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Body,  UseGuards, Get, Delete, Param } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -32,4 +32,14 @@ export class ReservationController {
     }
   }
 
+  //예매 취소
+  @Delete('my/reservations/:reservationId')
+  async deleteReservation(@UserInfo() user: User, @Param('reservationId') reservationId: number){
+    const result = await this.reservationService.deleteReservation(user, reservationId);
+    return {
+      status: 200,
+      message: '예매가 취소되었습니다.',
+      data: result
+    }
+  }
 }

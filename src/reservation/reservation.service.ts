@@ -4,7 +4,9 @@ import { PerformanceSchedule } from 'src/performance/entities/performanceSchedul
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import { DeleteReservationDto } from './dto/delete-reservation.dto';
 import { Reservation } from './entities/reservation.entity';
+import moment from 'moment';
 
 @Injectable()
 export class ReservationService {
@@ -88,4 +90,36 @@ export class ReservationService {
       reservationDate: reservation.createdAt
     }))
   }
+      //예매 취소 기능
+    async deleteReservation( user: User, reservationId: number){
+      const reservation  = await this.reservationRepository.findOne({
+        where: { reservationId, user },
+        relations: ['performanceSchedule', 'performance']
+      })
+
+      if(!reservation){
+        throw new NotFoundException('예매 내역을 찾을 수 없습니다.')
+      }
+
+      const currentDateTime = moment();
+      const performanceDateTime = moment(reservation.performanceSchedule.performanceDate + ' ' + reservation.performanceSchedule.performanceTime)
+
+      if (performanceDateTime.diff(currentDateTime, 'hours') < 3) {
+        throw new BadRequestException('공연 시작 3시간 전까지만 예매를 취소할 수 있습니다.')
+      }
+
+      await this.reservationRepository.manager.transaction(async transactionalEntityManager => {
+        user.points += reservation.paidPoints;
+        reservation.performanceSchedule.remainingSeats += reservation.quantity;
+
+        await transactionalEntityManager.save(user);
+        await transactionalEntityManager.save(reservation.performanceSchedule)
+        await transactionalEntityManager.remove(reservation)
+      });
+
+      return {
+        refundedPoints: reservation.paidPoints
+      }
+    }
+
 }
