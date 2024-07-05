@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Performance } from './performance.entity';
+import { Tickets } from 'src/reservation/entities/ticket.entity';
 
 @Entity({
     name: 'performance_schedules'
@@ -28,7 +29,10 @@ export class PerformanceSchedule {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP',  nullable: false })
   updatedAt: Date;
 
-    @ManyToOne(() => Performance, performance => performance.schedules)
-    performance: Performance;
+ @ManyToOne(() => Performance, performance => performance.schedules)
+ performance: Performance;
+
+ @OneToMany(() => Tickets, ticket => ticket.performanceSchedule)
+ tickets: Tickets[];
 
 }

@@ -42,7 +42,7 @@ export class PerformanceService {
       }
 
   //공연 상세 조회
-  async findOne(performanceId: number): Promise<Performance> {
+  async findOne(performanceId: number): Promise<Partial<Performance>> {
     const performance = await this.performanceRepository.findOne({
         where: {performanceId},
         relations: ['schedules']
