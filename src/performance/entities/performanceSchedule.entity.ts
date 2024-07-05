@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Performance } from './performance.entity';
-import { Tickets } from 'src/reservation/entities/ticket.entity';
+import { Reservation } from 'src/reservation/entities/reservation.entity';
 
 @Entity({
     name: 'performance_schedules'
@@ -32,7 +32,7 @@ export class PerformanceSchedule {
  @ManyToOne(() => Performance, performance => performance.schedules)
  performance: Performance;
 
- @OneToMany(() => Tickets, ticket => ticket.performanceSchedule)
- tickets: Tickets[];
+ @OneToMany(() => Reservation, reservation => reservation.performanceSchedule)
+ reservations: Reservation[];
 
 }

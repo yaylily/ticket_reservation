@@ -4,10 +4,10 @@ import { ReservationController } from './reservation.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PerformanceSchedule } from 'src/performance/entities/performanceSchedule.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Tickets } from './entities/ticket.entity';
+import { Reservation } from './entities/reservation.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PerformanceSchedule, User, Tickets])],
+  imports: [TypeOrmModule.forFeature([PerformanceSchedule, User, Reservation])],
   controllers: [ReservationController],
   providers: [ReservationService],
 })

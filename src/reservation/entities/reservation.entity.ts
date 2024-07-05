@@ -4,10 +4,10 @@ import { Performance } from 'src/performance/entities/performance.entity'
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity('tickets')
-export class Tickets {
+@Entity('reservations')
+export class Reservation {
     @PrimaryGeneratedColumn()
-    ticketId:number;
+    reservationId:number;
 
     @ManyToOne(() => User, user => user.tickets)
     user: User;
@@ -15,7 +15,7 @@ export class Tickets {
     @ManyToOne(() => Performance, performance => performance.tickets)
     performance: Performance;
 
-    @ManyToOne(() => PerformanceSchedule, performanceSchedule => performanceSchedule.tickets)
+    @ManyToOne(() => PerformanceSchedule, performanceSchedule => performanceSchedule.reservations)
     performanceSchedule: PerformanceSchedule;
 
     @Column({ type: 'int', nullable: false})

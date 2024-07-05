@@ -4,7 +4,7 @@ import { PerformanceSchedule } from 'src/performance/entities/performanceSchedul
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { Tickets } from './entities/ticket.entity';
+import { Reservation } from './entities/reservation.entity';
 
 @Injectable()
 export class ReservationService {
@@ -13,8 +13,8 @@ export class ReservationService {
     private readonly performanceScheduleRepository: Repository<PerformanceSchedule>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Tickets)
-    private readonly ticketRepository: Repository<Tickets>
+    @InjectRepository(Reservation)
+    private readonly reservationRepository: Repository<Reservation>
   ) {}
 
   //공연 예매
@@ -39,14 +39,14 @@ export class ReservationService {
       throw new BadRequestException('포인트가 부족합니다.')
     }
 
-    const result = await this.ticketRepository.manager.transaction(async transactionalEntityManager => {
+    const result = await this.reservationRepository.manager.transaction(async transactionalEntityManager => {
       user.points -= totalCost;
       schedule.remainingSeats -= quantity;
 
       await transactionalEntityManager.save(user);
       await transactionalEntityManager.save(schedule);
 
-      const ticket = this.ticketRepository.create({
+      const ticket = this.reservationRepository.create({
         user: user,
         performance: schedule.performance,
         performanceSchedule: schedule,
@@ -71,7 +71,7 @@ export class ReservationService {
 
   //예매 조회 기능
   async findReservations(user: User) {
-    const reservations = await this.ticketRepository.find({
+    const reservations = await this.reservationRepository.find({
       where: { user: user },
       relations: ['performance', 'performanceSchedule'],
       order: {createdAt: 'DESC'}

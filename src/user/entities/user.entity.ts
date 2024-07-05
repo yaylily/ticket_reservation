@@ -2,7 +2,7 @@ import { Column, Entity, Index, OneToMany, OneToOne, PrimaryGeneratedColumn } fr
 
 import { Role } from '../types/userRole.type';
 import { UserInfo } from './userinfo.entity';
-import { Tickets} from 'src/reservation/entities/ticket.entity'
+import { Reservation } from 'src/reservation/entities/reservation.entity'
 
 @Index('email', ['email'], { unique: true })
 @Entity({
@@ -33,6 +33,6 @@ export class User {
   @OneToOne(() => UserInfo, (userInfo) => userInfo.user)
   userInfo: UserInfo;
 
-  @OneToMany(() => Tickets, ticket => ticket.user)
-  tickets: Tickets[];
+  @OneToMany(() => Reservation, reservation => reservation.user)
+  tickets: Reservation[];
 }
