@@ -68,4 +68,24 @@ export class ReservationService {
     })
     return result
   }
+
+  //예매 조회 기능
+  async findReservations(user: User) {
+    const reservations = await this.ticketRepository.find({
+      where: { user: user },
+      relations: ['performance', 'performanceSchedule'],
+      order: {createdAt: 'DESC'}
+    })
+
+    return reservations.map(reservation => ({
+      title: reservation.performance.title,
+      location:reservation.performance.location,
+      price: reservation.performance.price,
+      quantity: reservation.quantity,
+      totalCost: reservation.paidPoints,
+      performanceDate: reservation.performanceSchedule.performanceDate,
+      performanceTime: reservation.performanceSchedule.performanceTime,
+      reservationDate: reservation.createdAt
+    }))
+  }
 }
