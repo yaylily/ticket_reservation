@@ -3,9 +3,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/user/types/userRole.type';
 
 import {
-  Body, Controller, Delete, Get, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+  Body, Controller, Get, Param, Post, Query, UseGuards} from '@nestjs/common';
 
 import { CreatePerformanceDto } from './dto/create-performance.dto';
 import { PerformanceService } from './performance.service';
@@ -51,6 +49,7 @@ export class PerformanceController {
     }
   }
 
+  //공연 등록
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @Post()

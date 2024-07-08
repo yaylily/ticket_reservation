@@ -38,6 +38,6 @@ export class Performance {
   schedules: PerformanceSchedule[];
 
   @OneToMany(() => Reservation, reservation => reservation.performance)
-  tickets: Reservation[];
+  reservations: Reservation[];
 
 }

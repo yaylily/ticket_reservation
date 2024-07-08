@@ -12,7 +12,7 @@ export class Reservation {
     @ManyToOne(() => User, user => user.tickets)
     user: User;
 
-    @ManyToOne(() => Performance, performance => performance.tickets)
+    @ManyToOne(() => Performance, performance => performance.reservations)
     performance: Performance;
 
     @ManyToOne(() => PerformanceSchedule, performanceSchedule => performanceSchedule.reservations)
