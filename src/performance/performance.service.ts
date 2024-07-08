@@ -84,11 +84,13 @@ export class PerformanceService {
     const performanceSchedule = schedules.map(schedule =>
         this.performanceScheduleRepository.create({
             ...schedule,
-            remainingSeats: schedule.remainingSeats ?? schedule.totalSeats,
+            remainingSeats: schedule.totalSeats,
             performance: savedPerformance,
         })
         )
-       await this.performanceScheduleRepository.save(performanceSchedule);
+        const savedSchedules = await this.performanceScheduleRepository.save(performanceSchedule);
+
+        savedPerformance.schedules = savedSchedules;
 
     return savedPerformance;
     }
