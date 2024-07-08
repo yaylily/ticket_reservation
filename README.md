@@ -1,75 +1,146 @@
-# ticket_reservation
+# Ticket Reservation System
+티켓 예매 사이트 만들기
 
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## 프로젝트 개요
+Ticket Reservation System은 사용자들이 다양한 공연을 검색하고 예매할 수 있는 웹 애플리케이션입니다. 사용자는 공연의 상세 정보를 확인하고, 날짜와 시간을 선택하여 예매할 수 있습니다.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 주요 기능
+- 공연 목록 조회
+- 공연 상세 조회
+- 공연 예매
+- 예매 내역 조회
+- 예매 취소
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 기술 스택
+- **Backend:** NestJS, TypeScript, TypeORM, MySQL
+- **Authentication:** JWT (JSON Web Tokens)
 
-## Description
+## 설치 및 실행
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
+### 1. 클론 저장소
 ```bash
-$ npm install
+git clone https://github.com/yaylily/ticket_reservation.git
+cd ticket_reservation
 ```
 
-## Running the app
-
+### 2. 의존성 설치
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### 3. 환경 변수 설정
+프로젝트 루트 디렉토리에 `.env` 파일을 생성하고, 다음 내용을 추가하세요:
+```env
+JWT_SECRET_KEY=your_jwt_secret_key
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+DB_HOST=your_db_host
+DB_PORT=your_db_port
+DB_NAME=your_db_name
+DB_SYNC=true
 ```
 
-## Support
+### 4. 데이터베이스 설정 및 마이그레이션
+TypeORM을 사용하여 데이터베이스를 설정하고, 필요한 엔티티와 테이블을 생성합니다.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 5. 서버 실행
+```bash
+npm run start
+```
 
-## Stay in touch
+## API 명세서
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 인증
 
-## License
+#### 회원가입
+- **URL:** `/users/sign-up`
+- **Method:** `POST`
+- **인증:** `PUBLIC`
 
-Nest is [MIT licensed](LICENSE).
+#### 로그인
+- **URL:** `/users/login`
+- **Method:** `POST`
+- **인증:** `PUBLIC`
+
+### 사용자
+
+#### 내 정보 조회
+- **URL:** `/users/profile`
+- **Method:** `GET`
+- **인증:** `AccessToken`
+- **접근 권한:** `USER`
+
+### 공연
+
+#### 공연 등록
+- **URL:** `/performances`
+- **Method:** `POST`
+- **인증:** `AccessToken`
+- **접근 권한:** `ADMIN`
+- **Body:**
+  ```json
+  {
+  "title": "공연 제목",
+  "description": "공연 설명",
+  "category": "공연 카테고리",
+  "location": "공연 장소",
+  "price": 공연 가격,
+  "img": "이미지 URL",
+  "schedules": [
+    {
+      "performanceDate": "공연 날짜 (YYYY-MM-DD)",
+      "performanceTime": "공연 시간 (HH:mm)",
+      "totalSeats": 전체 좌석 수
+    },
+    {
+      "performanceDate": "공연 날짜 (YYYY-MM-DD)",
+      "performanceTime": "공연 시간 (HH:mm)",
+      "totalSeats": 전체 좌석 수
+    }
+  ]
+  }
+
+#### 공연 목록 조회
+- **URL:** `/performances`
+- **Method:** `GET`
+- **인증:** `PUBLIC`
+
+#### 공연 검색
+- **URL:** `/performances`
+- **Method:** `GET`
+- **인증:** `PUBLIC`
+- **Query Parameters:**
+  - `category` (optional): 특정 카테고리의 공연을 조회합니다.
+  - `title` (optional): 공연명을 기준으로 검색합니다.
+
+#### 공연 상세 조회
+- **URL:** `/performances/:performanceId`
+- **Method:** `GET`
+- **인증:** `PUBLIC`
+
+### 예매
+
+#### 공연 예매
+- **URL:** `/performances/:performanceId/reservations`
+- **Method:** `POST`
+- **인증:** `AccessToken`
+- **접근 권한:** `USER`
+- **Body:**
+  ```json
+  {
+  "performanceScheduleId": 공연 스케줄 ID,
+  "quantity": 예매 수량
+  }
+
+#### 예매 목록 조회
+- **URL:** `/performances/reservations`
+- **Method:** `GET`
+- **인증:** `AccessToken`
+- **접근 권한:** `USER`
+
+#### 예매 취소
+- **URL:** `/performances/reservations/:reservationId`
+- **Method:** `DELETE`
+- **인증:** `AccessToken`
+- **접근 권한:** `USER`
+
